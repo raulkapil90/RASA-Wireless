@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #f1f5f9;
+  --color-brand-surface: #ffffff;
+  --color-brand-card: #ffffff;
+  --color-brand-border: #e2e8f0;
+
+  --color-brand-orange: #f97316;
+  --color-brand-blue: #0ea5e9;
+  --color-brand-red: #ef4444;
+  --color-brand-green: #10b981;
+
+  --color-brand-text: #0f172a;
+  --color-brand-muted: #64748b;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-brand-text font-sans antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-brand-card border border-brand-border rounded-2xl p-6 shadow-sm;
+  }
+
+  .badge {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-semibold border;
+  }
+
+  .badge-info {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-blue/10 text-brand-blue border border-brand-blue/20;
+  }
+
+  .badge-warning {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-orange/10 text-brand-orange border border-brand-orange/20;
+  }
+
+  .badge-critical {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-red/10 text-brand-red border border-brand-red/20;
+  }
+
+  .terminal {
+    @apply font-mono bg-slate-900 border border-slate-800 rounded-lg p-4 overflow-auto text-sm leading-relaxed text-slate-300;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-brand-orange text-white rounded-xl font-bold hover:bg-brand-orange/90 transition-all shadow-sm;
+  }
+}

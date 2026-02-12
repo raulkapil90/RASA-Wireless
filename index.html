@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>NetOps AI — Wi-Fi Troubleshooting Assistant</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script>
+    // Global error handler for production debugging
+    window.onerror = function (msg, url, line, col, error) {
+      var extra = !col ? '' : '\ncolumn: ' + col;
+      extra += !error ? '' : '\nerror: ' + error;
+      document.body.innerHTML = '<div style="padding: 20px; color: red; font-family: monospace;"><h1>RASA Load Error</h1><pre>' + msg + '\nline: ' + line + extra + '</pre></div>';
+      return false;
+    };
+  </script>
+  <script type="module" src="/src/main.jsx"></script>
+  <!-- Service Worker disabled for initial production stability -->
+  <!--
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+        });
+      }
+    </script>
+    -->
+</body>
+
+</html>
