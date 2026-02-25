@@ -5,11 +5,10 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 
-// Lazy load pages
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
-const Incidents = React.lazy(() => import('./pages/Incidents'));
-const LogAnalysis = React.lazy(() => import('./pages/LogAnalysis'));
-const CliTranslator = React.lazy(() => import('./pages/CliTranslator'));
+import Dashboard from './pages/Dashboard';
+import Incidents from './pages/Incidents';
+import LogAnalysis from './pages/LogAnalysis';
+import ConfigDoctor from './pages/ConfigDoctor';
 
 // Placeholder components for KB and Reports
 const Placeholder = ({ title }) => (
@@ -33,26 +32,10 @@ function App() {
               <Layout />
             </ProtectedRoute>
           }>
-            <Route index element={
-              <React.Suspense fallback={<div className="p-8 text-brand-muted font-bold flex items-center gap-2"><div className="w-4 h-4 border-2 border-brand-orange border-t-transparent rounded-full animate-spin" /> Loading RASA Hub...</div>}>
-                <Dashboard />
-              </React.Suspense>
-            } />
-            <Route path="issues" element={
-              <React.Suspense fallback={<div className="p-8 text-brand-muted font-bold flex items-center gap-2"><div className="w-4 h-4 border-2 border-brand-orange border-t-transparent rounded-full animate-spin" /> Retrieving Incidents...</div>}>
-                <Incidents />
-              </React.Suspense>
-            } />
-            <Route path="analysis" element={
-              <React.Suspense fallback={<div className="p-8 text-brand-muted font-bold flex items-center gap-2"><div className="w-4 h-4 border-2 border-brand-orange border-t-transparent rounded-full animate-spin" /> Initializing AI Agent...</div>}>
-                <LogAnalysis />
-              </React.Suspense>
-            } />
-            <Route path="translator" element={
-              <React.Suspense fallback={<div className="p-8 text-brand-muted font-bold flex items-center gap-2"><div className="w-4 h-4 border-2 border-brand-orange border-t-transparent rounded-full animate-spin" /> Synchronizing Vendors...</div>}>
-                <CliTranslator />
-              </React.Suspense>
-            } />
+            <Route index element={<Dashboard />} />
+            <Route path="issues" element={<Incidents />} />
+            <Route path="analysis" element={<LogAnalysis />} />
+            <Route path="config-doctor" element={<ConfigDoctor />} />
             <Route path="kb" element={<Placeholder title="Knowledge Base" />} />
             <Route path="reports" element={<Placeholder title="Reports" />} />
             <Route path="settings" element={<Placeholder title="Settings" />} />

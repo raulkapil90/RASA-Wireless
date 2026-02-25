@@ -7,9 +7,14 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const savedUser = localStorage.getItem('rasa_auth_user');
-        if (savedUser) {
-            setUser(JSON.parse(savedUser));
+        try {
+            const savedUser = localStorage.getItem('rasa_auth_user');
+            if (savedUser) {
+                setUser(JSON.parse(savedUser));
+            }
+        } catch (e) {
+            console.error('RASA: Auth restore failed', e);
+            localStorage.removeItem('rasa_auth_user');
         }
         setLoading(false);
     }, []);

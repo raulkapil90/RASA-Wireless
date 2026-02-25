@@ -1,16 +1,28 @@
-# React + Vite
+# RASA Wireless — AI-Powered Wi-Fi Troubleshooting Assistant
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+RASA Wireless is a next-generation NetOps assistant designed to simplify complex wireless infrastructure troubleshooting. It leverages AI-driven log analysis and a modern "Hub and Spoke" interface to provide actionable insights for network engineers.
 
-Currently, two official plugins are available:
+## 🚀 Live Project
+- **Production URL:** [raul-s-projects-c2478977.vercel.app](https://raul-s-projects-c2478977.vercel.app)
+- **GitHub Repository:** [raulkapil90/RASA-Wireless](https://github.com/raulkapil90/RASA-Wireless)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Key Features
+- **AI Log Intelligence (V2.2):** Auto-detects and analyzes logs from Cisco AireOS and Catalyst (IOS-XE) systems.
+- **Service Hub:** Centralized dashboard for Log Analysis, Incident Tracking, and CLI Translation.
+- **Production-Ready:** Optimized for Vercel deployment with full SPA routing support via `vercel.json`.
+- **Modern UI:** Built with React, Vite, and Tailwind CSS for a high-performance, responsive experience.
 
-## React Compiler
+## 💻 Technical Setup
+- **Framework:** React 18 + Vite
+- **Styling:** Tailwind CSS (Vanilla CSS utilities)
+- **Routing:** React Router (Browser Mode)
+- **Deployment:** Vercel (Configured with `vercel.json`)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ⚡ Quick Start
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start the dev server: `npm run dev`
+4. Build for production: `npm run build`
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+*Created with 🛡️ RASA Intelligence — Wireless Simplified.*

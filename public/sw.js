@@ -1,20 +1,23 @@
-const CACHE_NAME = 'netops-ai-v1';
-const urlsToCache = [
-    '/',
-    '/index.html',
-    '/manifest.json'
-];
+// NUCLEAR SELF-DESTRUCT: This service worker unregisters itself and clears all caches.
+// This ensures that stale cached JavaScript bundles are never served again.
 
-self.addEventListener('install', event => {
+self.addEventListener('install', () => {
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(urlsToCache))
+        caches.keys().then(names => Promise.all(names.map(name => caches.delete(name))))
+            .then(() => self.clients.claim())
+            .then(() => self.registration.unregister())
+            .then(() => {
+                // Force all controlled pages to reload with fresh code
+                self.clients.matchAll().then(clients => {
+                    clients.forEach(client => client.navigate(client.url));
+                });
+            })
     );
 });
 
-self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => response || fetch(event.request))
-    );
-});
+// Pass all requests straight to network — no caching
+self.addEventListener('fetch', () => { });

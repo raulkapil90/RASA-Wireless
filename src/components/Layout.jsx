@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { RasaLogoLockup } from './RasaLogo';
 import {
     LayoutDashboard,
     Terminal,
-    Search,
+    Stethoscope,
     AlertCircle,
     BookOpen,
     BarChart3,
@@ -24,7 +24,7 @@ const sidebarLinks = [
         section: 'TOOLS & SERVICES', links: [
             { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
             { path: '/analysis', icon: Terminal, label: 'Log Analysis' },
-            { path: '/translator', icon: Search, label: 'CLI Translator' },
+            { path: '/config-doctor', icon: Stethoscope, label: 'Config Doctor' },
             { path: '/issues', icon: AlertCircle, label: 'Incidents' },
             { path: '/kb', icon: BookOpen, label: 'Knowledge Base' },
             { path: '/reports', icon: BarChart3, label: 'Reports' },
@@ -46,7 +46,7 @@ export default function Layout() {
     };
 
     return (
-        <div className="min-h-screen bg-brand-bg flex text-brand-text">
+        <div className="h-screen bg-brand-bg flex text-brand-text overflow-hidden">
             {/* Sidebar Mobile Overlay */}
             {isSidebarOpen && (
                 <div
@@ -63,9 +63,9 @@ export default function Layout() {
       `}>
                 <div className="flex flex-col h-full px-6 py-10">
                     {/* Integrated RASA Logo Lockup */}
-                    <div className="mb-12">
+                    <Link to="/" className="relative z-10 block mb-12 hover:opacity-90 transition-all duration-200 group cursor-pointer active:scale-95">
                         <RasaLogoLockup />
-                    </div>
+                    </Link>
 
                     <nav className="flex-1 space-y-8 overflow-y-auto">
                         {sidebarLinks.map((section) => (
@@ -138,10 +138,10 @@ export default function Layout() {
                         <button onClick={toggleSidebar} className="p-2 lg:hidden text-brand-muted hover:text-brand-orange transition-colors">
                             <Menu className="w-6 h-6" />
                         </button>
-                        <div className="hidden sm:block">
+                        <Link to="/" className="relative z-10 hidden sm:block hover:opacity-80 active:scale-95 transition-all duration-200 cursor-pointer">
                             <h1 className="text-lg font-bold text-slate-900 tracking-tight">Rasa Service Hub</h1>
                             <p className="text-xs text-brand-muted">Welcome back, {user?.username || 'Admin'}</p>
-                        </div>
+                        </Link>
                     </div>
 
                     <div className="flex items-center gap-2 sm:gap-6">

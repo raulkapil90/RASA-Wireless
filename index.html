@@ -8,32 +8,83 @@
   <meta name="theme-color" content="#0a0e1a" />
   <link rel="manifest" href="/manifest.json" />
   <title>NetOps AI — Wi-Fi Troubleshooting Assistant</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0f172a;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+
+    .boot-screen {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+    }
+
+    .loader {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #f97316;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    h2 {
+      color: #f97316;
+      margin: 0 0 8px 0;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      font-size: 28px;
+    }
+
+    p {
+      opacity: 0.5;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+      letter-spacing: 0.05em;
+    }
+  </style>
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <div class="boot-screen">
+      <div>
+        <div class="loader"></div>
+        <h2>RASA WIRELESS</h2>
+        <p>INITIALIZING AI INTERFACE...</p>
+      </div>
+    </div>
+  </div>
   <script>
-    // Global error handler for production debugging
-    window.onerror = function (msg, url, line, col, error) {
-      var extra = !col ? '' : '\ncolumn: ' + col;
-      extra += !error ? '' : '\nerror: ' + error;
-      document.body.innerHTML = '<div style="padding: 20px; color: red; font-family: monospace;"><h1>RASA Load Error</h1><pre>' + msg + '\nline: ' + line + extra + '</pre></div>';
-      return false;
-    };
+    // Force-kill any cached Service Workers to ensure fresh code loads
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (registrations) {
+        registrations.forEach(function (registration) {
+          registration.unregister();
+        });
+      });
+      caches.keys().then(function (names) {
+        names.forEach(function (name) {
+          caches.delete(name);
+        });
+      });
+    }
   </script>
   <script type="module" src="/src/main.jsx"></script>
-  <!-- Service Worker disabled for initial production stability -->
-  <!--
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(err => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-        });
-      }
-    </script>
-    -->
 </body>
 
 </html>
