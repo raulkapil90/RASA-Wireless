@@ -4,6 +4,7 @@ import {
     Wrench,
     Activity,
     Command,
+    Stethoscope,
     ChevronRight,
     ShieldCheck,
     Zap,
@@ -11,24 +12,21 @@ import {
 } from 'lucide-react';
 
 const ServiceCard = ({ title, description, icon: Icon, colorClass, path }) => (
-    <div className="card group hover:border-brand-orange/50 transition-all duration-300 flex flex-col items-center text-center p-10 h-full">
+    <Link to={path} className="card group hover:border-brand-orange/50 transition-all duration-300 flex flex-col items-center text-center p-10 h-full cursor-pointer hover:shadow-xl hover:shadow-brand-orange/5">
         <div className={`p-5 rounded-2xl mb-8 transition-transform group-hover:scale-110 duration-300 ${colorClass} text-white shadow-lg`}>
             <Icon className="w-10 h-10" />
         </div>
-        <h3 className="text-xl font-bold text-slate-900 mb-4 tracking-tight group-hover:text-brand-orange transition-colors">
+        <h3 className="text-xl font-bold text-slate-900 mb-4 tracking-tight group-hover:text-brand-orange transition-colors uppercase">
             {title}
         </h3>
-        <p className="text-brand-muted text-sm leading-relaxed mb-10 flex-1">
+        <p className="text-brand-muted text-sm leading-relaxed mb-6 flex-1">
             {description}
         </p>
-        <Link
-            to={path}
-            className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-brand-muted hover:text-brand-orange transition-colors uppercase"
-        >
-            Launch Tool
+        <div className="inline-flex items-center gap-2 text-[10px] font-black tracking-[0.2em] text-brand-muted group-hover:text-brand-orange transition-colors uppercase mt-auto">
+            Open Tool
             <ChevronRight className="w-4 h-4" />
-        </Link>
-    </div>
+        </div>
+    </Link>
 );
 
 export default function Dashboard() {
@@ -61,11 +59,11 @@ export default function Dashboard() {
                     path="/issues"
                 />
                 <ServiceCard
-                    title="CLI Translator"
-                    description="Map configuration commands across different network vendors instantly."
-                    icon={Command}
+                    title="Config Doctor"
+                    description="Automated WLC Configuration Auditor & Best Practice Analyzer. Scan for RF risks and misconfigs."
+                    icon={Stethoscope}
                     colorClass="bg-brand-blue shadow-brand-blue/20"
-                    path="/translator"
+                    path="/config-doctor"
                 />
             </div>
 

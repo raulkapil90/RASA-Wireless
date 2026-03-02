@@ -24,3 +24,11 @@ dist-ssr
 *.sw?
 
 .vercel
+.env*.local
+
+# Artifacts and Binary docs
+*.zip
+*.pdf
+RASA-Wireless-NetOps-AI/
+node_modules/
+.DS_Store
