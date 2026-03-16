@@ -47,7 +47,7 @@ const RemediationCard = ({ finding }) => {
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-brand-orange" />
-                    <span className={`badge ${severityColors[finding.severity]} px-3 py-1 font-black uppercase tracking-tighter shadow-sm`}>
+                    <span className={`badge ${severityColors[finding.severity] || severityColors.info} px-3 py-1 font-black uppercase tracking-tighter shadow-sm`}>
                         {finding.severity}
                     </span>
                     {finding.phase && (
@@ -84,7 +84,18 @@ const RemediationCard = ({ finding }) => {
                 </div>
             </div>
 
-            <h3 className="text-2xl font-black text-slate-900 mb-5 tracking-tight leading-tight">{finding.title}</h3>
+            <h3 className="text-2xl font-black text-slate-900 mb-3 tracking-tight leading-tight">{finding.title}</h3>
+
+            {/* Consensus badge */}
+            {finding.consensus && (
+                <div className="flex items-center gap-2 mb-5">
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full border ${finding.consensus.agreement === 'high' ? 'text-emerald-600 bg-emerald-50 border-emerald-200' :
+                            finding.consensus.agreement === 'medium' ? 'text-brand-orange bg-brand-orange/5 border-brand-orange/20' :
+                                'text-slate-500 bg-slate-50 border-slate-200'
+                        }`}>⚖ {finding.consensus.agreement} consensus</span>
+                    {finding.consensus.note && <span className="text-[9px] text-slate-400 font-medium italic">{finding.consensus.note}</span>}
+                </div>
+            )}
 
             <div className="bg-brand-orange/[0.03] border border-brand-orange/10 rounded-2xl p-6 mb-8 ring-1 ring-brand-orange/5">
                 <h4 className="text-[10px] font-black text-brand-orange uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
@@ -134,7 +145,7 @@ const RemediationCard = ({ finding }) => {
                 <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em] flex items-center gap-2 mb-4 px-1">
                     <ShieldCheck className="w-5 h-5 text-emerald-500" /> Actionable Remediation
                 </h4>
-                {finding.remediation.map((step, idx) => (
+                {(finding.remediation || []).map((step, idx) => (
                     <div key={idx} className="flex gap-4 p-5 bg-slate-50/80 rounded-2xl border border-slate-200/60 group hover:border-brand-orange/40 hover:bg-white hover:shadow-lg transition-all duration-300">
                         <span className="shrink-0 text-brand-orange font-black text-sm h-7 w-7 rounded-xl bg-brand-orange/10 flex items-center justify-center group-hover:bg-brand-orange group-hover:text-white transition-colors">{idx + 1}</span>
                         <p className="text-[15px] text-slate-900 font-bold leading-snug">{step}</p>

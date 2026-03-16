@@ -8,7 +8,9 @@ import {
     ChevronRight,
     ShieldCheck,
     Zap,
-    Sparkles
+    Sparkles,
+    Shield,
+    Database
 } from 'lucide-react';
 
 const ServiceCard = ({ title, description, icon: Icon, colorClass, path }) => (
@@ -64,6 +66,20 @@ export default function Dashboard() {
                     icon={Stethoscope}
                     colorClass="bg-brand-blue shadow-brand-blue/20"
                     path="/config-doctor"
+                />
+                <ServiceCard
+                    title="Catalyst Bridge"
+                    description="Live CCC issue feed with Narrative Intelligence and Human-in-the-Loop remediation workflows."
+                    icon={Shield}
+                    colorClass="bg-violet-600 shadow-violet-600/20"
+                    path="/catalyst-bridge"
+                />
+                <ServiceCard
+                    title="IPAM Forecast"
+                    description="Predictive IP Pool Capacity Engine. Forecast DHCP scope exhaustion before it impacts users."
+                    icon={Database}
+                    colorClass="bg-cyan-600 shadow-cyan-600/20"
+                    path="/ipam-forecast"
                 />
             </div>
 

@@ -10,13 +10,16 @@ import {
     BookOpen,
     BarChart3,
     Settings,
+    Settings2,
     LogOut,
     Menu,
     X,
     Wifi,
     User,
     Bell,
-    Search as SearchIcon
+    Search as SearchIcon,
+    Shield,
+    Database
 } from 'lucide-react';
 
 const sidebarLinks = [
@@ -25,6 +28,9 @@ const sidebarLinks = [
             { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
             { path: '/analysis', icon: Terminal, label: 'Log Analysis' },
             { path: '/config-doctor', icon: Stethoscope, label: 'Config Doctor' },
+            { path: '/configuration', icon: Settings2, label: 'Configuration' },
+            { path: '/catalyst-bridge', icon: Shield, label: 'Catalyst Bridge' },
+            { path: '/ipam-forecast', icon: Database, label: 'IPAM Forecast' },
             { path: '/issues', icon: AlertCircle, label: 'Incidents' },
             { path: '/kb', icon: BookOpen, label: 'Knowledge Base' },
             { path: '/reports', icon: BarChart3, label: 'Reports' },

@@ -24,6 +24,7 @@ dist-ssr
 *.sw?
 
 .vercel
+.env
 .env*.local
 
 # Artifacts and Binary docs
@@ -32,3 +33,7 @@ dist-ssr
 RASA-Wireless-NetOps-AI/
 node_modules/
 .DS_Store
+*.db
+__pycache__/
+*.pyc
+chroma.sqlite3

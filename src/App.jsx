@@ -9,6 +9,9 @@ import Dashboard from './pages/Dashboard';
 import Incidents from './pages/Incidents';
 import LogAnalysis from './pages/LogAnalysis';
 import ConfigDoctor from './pages/ConfigDoctor';
+import CatalystBridge from './pages/CatalystBridge';
+import IpamForecast from './pages/IpamForecast';
+import Configuration from './pages/Configuration';
 
 // Placeholder components for KB and Reports
 const Placeholder = ({ title }) => (
@@ -36,6 +39,9 @@ function App() {
             <Route path="issues" element={<Incidents />} />
             <Route path="analysis" element={<LogAnalysis />} />
             <Route path="config-doctor" element={<ConfigDoctor />} />
+            <Route path="catalyst-bridge" element={<CatalystBridge />} />
+            <Route path="ipam-forecast" element={<IpamForecast />} />
+            <Route path="configuration" element={<Configuration />} />
             <Route path="kb" element={<Placeholder title="Knowledge Base" />} />
             <Route path="reports" element={<Placeholder title="Reports" />} />
             <Route path="settings" element={<Placeholder title="Settings" />} />
