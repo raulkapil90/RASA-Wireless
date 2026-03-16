@@ -1,0 +1,28 @@
+rules:
+  - id: PA-SEC-001
+    standard: CIS-PAN-OS
+    description: "Vulnerability protection profile must be referenced in security policies"
+    severity: HIGH
+    pattern_missing: "vulnerability-protection"
+    remediation_template: "Assign a Vulnerability Protection Profile to all security policy rules via Panorama or device UI."
+
+  - id: PA-SEC-002
+    standard: CIS-PAN-OS
+    description: "Anti-spyware profile must be active"
+    severity: HIGH
+    pattern_missing: "anti-spyware"
+    remediation_template: "Assign an Anti-Spyware Profile to all security policy rules."
+
+  - id: PA-SEC-003
+    standard: NIST-800-53
+    description: "Log forwarding profile must be configured on security policies"
+    severity: MEDIUM
+    pattern_missing: "log-forwarding"
+    remediation_template: "Assign a Log Forwarding Profile to all security policy rules to ensure syslog export."
+
+  - id: PA-SEC-004
+    standard: PCI-DSS
+    description: "DNS Security must be enabled"
+    severity: MEDIUM
+    pattern_missing: "dns-security"
+    remediation_template: "Enable DNS Security in the Anti-Spyware profile and assign it to security rules."

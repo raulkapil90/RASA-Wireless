@@ -49,6 +49,7 @@ from .webhooks.router import router as webhook_router
 from .llm_analyzer import analyze_syslogs
 
 from .routers.config import router as config_router
+from .routers.compliance import router as compliance_router
 from .db.database import engine, Base
 
 logging.basicConfig(
@@ -74,6 +75,10 @@ async def lifespan(app: FastAPI):
     ccc_client = CccClient()
     mode = "DEMO" if ccc_client.auth.is_demo_mode else "LIVE"
     logger.info("Engine ready. CCC mode: %s", mode)
+    # Start syslog receiver for real-time config-change detection
+    from .compliance.syslog_receiver import start_syslog_server
+    import asyncio
+    asyncio.create_task(start_syslog_server())
     yield
     logger.info("Shutting down.")
 
@@ -95,9 +100,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── Mount Webhook Router ──────────────────────────────────────────────────
+# ── Mount Routers ────────────────────────────────────────────────────────
 app.include_router(webhook_router, prefix="/webhooks")
 app.include_router(config_router)
+app.include_router(compliance_router)
 
 
 # ── Request / Response Models ─────────────────────────────────────────────

@@ -19,6 +19,7 @@ import {
     Bell,
     Search as SearchIcon,
     Shield,
+    ShieldCheck,
     Database
 } from 'lucide-react';
 
@@ -29,6 +30,7 @@ const sidebarLinks = [
             { path: '/analysis', icon: Terminal, label: 'Log Analysis' },
             { path: '/config-doctor', icon: Stethoscope, label: 'Config Doctor' },
             { path: '/configuration', icon: Settings2, label: 'Configuration' },
+            { path: '/compliance', icon: ShieldCheck, label: 'Compliance' },
             { path: '/catalyst-bridge', icon: Shield, label: 'Catalyst Bridge' },
             { path: '/ipam-forecast', icon: Database, label: 'IPAM Forecast' },
             { path: '/issues', icon: AlertCircle, label: 'Incidents' },

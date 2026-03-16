@@ -12,6 +12,7 @@ import ConfigDoctor from './pages/ConfigDoctor';
 import CatalystBridge from './pages/CatalystBridge';
 import IpamForecast from './pages/IpamForecast';
 import Configuration from './pages/Configuration';
+import Compliance from './pages/Compliance';
 
 // Placeholder components for KB and Reports
 const Placeholder = ({ title }) => (
@@ -42,6 +43,7 @@ function App() {
             <Route path="catalyst-bridge" element={<CatalystBridge />} />
             <Route path="ipam-forecast" element={<IpamForecast />} />
             <Route path="configuration" element={<Configuration />} />
+            <Route path="compliance" element={<Compliance />} />
             <Route path="kb" element={<Placeholder title="Knowledge Base" />} />
             <Route path="reports" element={<Placeholder title="Reports" />} />
             <Route path="settings" element={<Placeholder title="Settings" />} />

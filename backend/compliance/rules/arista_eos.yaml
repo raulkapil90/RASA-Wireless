@@ -1,0 +1,28 @@
+rules:
+  - id: ARISTA-SEC-001
+    standard: CIS-EOS
+    description: "Management telnet must be disabled"
+    severity: HIGH
+    pattern: "management telnet"
+    remediation_template: "conf\nno management telnet\nend"
+
+  - id: ARISTA-SEC-002
+    standard: CIS-EOS
+    description: "Management API HTTP must use HTTPS only"
+    severity: HIGH
+    pattern_missing: "protocol https"
+    remediation_template: "conf\nmanagement api http-commands\nno protocol http\nprotocol https\nend"
+
+  - id: ARISTA-SEC-003
+    standard: NIST-800-53
+    description: "NTP server must be configured"
+    severity: MEDIUM
+    pattern_missing: "ntp server"
+    remediation_template: "conf\nntp server 10.0.0.1\nend"
+
+  - id: ARISTA-SEC-004
+    standard: CIS-EOS
+    description: "Login banner must be configured"
+    severity: MEDIUM
+    pattern_missing: "banner login"
+    remediation_template: "conf\nbanner login Authorized access only\nend"

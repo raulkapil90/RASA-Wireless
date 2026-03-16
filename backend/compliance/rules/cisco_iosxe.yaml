@@ -1,0 +1,42 @@
+rules:
+  - id: CISCO-SEC-001
+    standard: CIS-IOS
+    description: "Telnet must be disabled on all VTY lines"
+    severity: HIGH
+    pattern: "transport input telnet"
+    remediation_template: "conf t\nline vty 0 15\ntransport input ssh\nend"
+
+  - id: CISCO-SEC-002
+    standard: CIS-IOS
+    description: "SSH version 2 must be enforced"
+    severity: HIGH
+    pattern_missing: "ip ssh version 2"
+    remediation_template: "conf t\nip ssh version 2\nend"
+
+  - id: CISCO-SEC-003
+    standard: NIST-800-53
+    description: "NTP server must be configured"
+    severity: MEDIUM
+    pattern_missing: "ntp server"
+    remediation_template: "conf t\nntp server 10.0.0.1\nend"
+
+  - id: CISCO-SEC-004
+    standard: CIS-IOS
+    description: "Password encryption service must be enabled"
+    severity: HIGH
+    pattern_missing: "service password-encryption"
+    remediation_template: "conf t\nservice password-encryption\nend"
+
+  - id: CISCO-SEC-005
+    standard: PCI-DSS
+    description: "Login banner must be configured"
+    severity: MEDIUM
+    pattern_missing: "banner login"
+    remediation_template: "conf t\nbanner login ^C Authorized Use Only ^C\nend"
+
+  - id: CISCO-RF-001
+    standard: CISCO-BEST-PRACTICE
+    description: "Low data rates (1/2/5.5 Mbps) should be disabled on WLANs"
+    severity: HIGH
+    pattern: "data-rate (1\\.0|2\\.0|5\\.5) (enable|mandatory)"
+    remediation_template: "conf t\nap profile default\nno dot11 24ghz data-rate 1.0\nno dot11 24ghz data-rate 2.0\nno dot11 24ghz data-rate 5.5\nend"
