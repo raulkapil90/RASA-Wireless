@@ -1,0 +1,13 @@
+=== SENTRY TEST 1: Server startup (check above — no import errors) ===
+PASS: Server started successfully with sentry-sdk installed
+
+=== SENTRY TEST 2: GET /api/health (no key required) ===
+HTTP 200
+{
+  "status": "healthy",
+  "version": "2.0.0",
+  "documents_indexed": 170,
+  "ccc_mode": "demo"
+}
+
+=== SENTRY TEST 3: GET /api/sentry-test (expect 500) ===

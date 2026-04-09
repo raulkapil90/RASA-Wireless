@@ -1,3 +1,5 @@
+from fastapi import Depends
+from backend.services.auth import verify_api_key
 """
 External Integrations Hub — FastAPI Router
 CRUD for registered external monitoring tools + connectivity ping.
@@ -18,7 +20,7 @@ from backend.db.database import get_db
 from backend.db.models import ExternalIntegration
 
 logger = logging.getLogger("integrations")
-router = APIRouter(prefix="/integrations", tags=["integrations"])
+router = APIRouter(prefix="/integrations", tags=["integrations"], dependencies=[Depends(verify_api_key)])
 
 # ── Pydantic models ───────────────────────────────────────────────────────────
 

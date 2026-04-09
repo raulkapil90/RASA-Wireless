@@ -1,3 +1,5 @@
+from fastapi import Depends
+from backend.services.auth import verify_api_key
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
@@ -7,7 +9,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/config", tags=["config"])
+router = APIRouter(prefix="/config", tags=["config"], dependencies=[Depends(verify_api_key)])
 
 # --- Credential Profiles ---
 

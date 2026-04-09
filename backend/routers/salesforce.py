@@ -1,3 +1,5 @@
+from fastapi import Depends
+from backend.services.auth import verify_api_key
 """
 Salesforce Cases Integration — FastAPI Router
 OAuth 2.0 username-password flow for Salesforce REST API.
@@ -12,7 +14,7 @@ import httpx
 from fastapi import APIRouter, HTTPException
 
 logger = logging.getLogger("salesforce")
-router = APIRouter(prefix="/salesforce", tags=["salesforce"])
+router = APIRouter(prefix="/salesforce", tags=["salesforce"], dependencies=[Depends(verify_api_key)])
 
 # In-memory token cache: {access_token, instance_url, expires_at}
 _token_cache: Dict[str, Any] = {}

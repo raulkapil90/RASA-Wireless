@@ -28,3 +28,11 @@ CCC_USERNAME = os.getenv("CCC_USERNAME", "")
 CCC_PASSWORD = os.getenv("CCC_PASSWORD", "")
 CCC_VERIFY_SSL = os.getenv("CCC_VERIFY_SSL", "true").lower() == "true"
 CCC_WEBHOOK_SECRET = os.getenv("CCC_WEBHOOK_SECRET", "")
+
+# Authentication Configuration
+RASA_API_KEY = os.getenv("RASA_API_KEY", "dev-secret-key-123")
+API_KEY_ENABLED = os.getenv("API_KEY_ENABLED", "true").lower() == "true"
+
+# ── Observability ──────────────────────────────────────────────────
+SENTRY_DSN = os.getenv("SENTRY_DSN", "")  # Empty string = Sentry disabled
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")

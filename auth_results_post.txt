@@ -1,0 +1,43 @@
+--- TEST 1: HEALTH NO KEY ---
+Status: 200
+{
+  "status": "healthy",
+  "version": "2.0.0",
+  "documents_indexed": 170,
+  "ccc_mode": "demo"
+}
+
+--- TEST 2: SOURCES NO KEY ---
+Status: 403
+{
+  "detail": "Invalid or missing API key"
+}
+
+--- TEST 3: SOURCES WITH KEY ---
+Status: 200
+{
+  "sources": [
+    {
+      "title": "Cisco Catalyst 9800 Series Wireless Controllers - Configuration Guides - Cisco",
+      "url": "https://www.cisco.com/c/en/us/support/wireless/catalyst-9800-series-wireless-controllers/products-installation-and-configuration-guides-list.html",
+      "type": "doc",
+      "last_updated": "2026-02-25T15:15:21.172229+00:00",
+      "chunks": 9
+    },
+    {
+      "title": "Cisco Catalyst 9800 Series Wireless Controllers - Release Notes - Cisco",
+      "url": "https://www.cisco.com/c/en/us/support/wireless/catalyst-9800-series-wireless-controllers/products-release-notes-list.html",
+      "type": "doc",
+      "last_updated": "2026-02-25T15:15:22.762120+00:00",
+      "chunks": 8
+    },
+    {
+      "title": "Cisco Catalyst 9800 Series Configuration Best Practices - Cisco",
+      "url": "https://www.cisco.com/c/en/us/products/collateral/wireless/catalyst-9800-series-wireless-controllers/guide-c07-743627.html",
+      "type": "doc",
+      "last_updated": "2026-02-25T15:15:26.634066+00:00",
+      "chunks": 153
+    }
+  ],
+  "total": 3
+}

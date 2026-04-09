@@ -73,3 +73,46 @@ rm backend/db/netops.db
 # Re-seed basic deterministic models
 python backend/data/seed_resolutions.py
 ```
+
+### 7. ChromaDB Persistence on Railway
+
+When deploying to Railway, the container filesystem is ephemeral. This means ChromaDB will reset on every deployment if you do not attach a persistent volume to `CHROMA_DB_PATH`.
+
+**To persist your RAG knowledge base & tier-1 deterministic cache:**
+1. Go to your Railway project dashboard and open the `backend` service settings.
+2. Navigate to the **Volumes** tab.
+3. Click **+ New Volume** and give it a name (e.g. `chroma-data`).
+4. Set the **Mount Path** to `/app/chroma_store` (or wherever your `CHROMA_DB_PATH` is set inside the container, matching your Railway Nixpacks working directory).
+5. Ensure `CHROMA_DB_PATH=/app/chroma_store` is injected in the **Variables** tab.
+
+**Warning:** Without a volume mounted, all stored vectors and autonomous resolutions will be completely wiped on every new container restart.
+
+---
+
+## 8. Sentry Error Tracking Setup
+
+Sentry captures unhandled exceptions, slow transactions, and performance regressions in real-time. The backend is already instrumented — you just need to connect your DSN.
+
+### Create a Free Account
+1. Go to **https://sentry.io** and sign up for a free account (supports up to 5k errors/month).
+2. Click **Create Project**, select **Python**, and name it `netops-ai-backend`.
+3. Sentry will display a `dsn=` value — copy this (looks like `https://abc123@o123456.ingest.sentry.io/789`).
+
+### Find Your DSN
+1. In your Sentry project, navigate to **Settings → Projects → [Your Project] → Client Keys (DSN)**.
+2. The **Default** DSN is the value you need.
+
+### Set Railway Environment Variables
+In the **Variables** tab of your Railway backend service, add:
+
+| Variable | Value |
+|---|---|
+| `SENTRY_DSN` | `https://your-key@oXXXXX.ingest.sentry.io/XXXXXX` |
+| `ENVIRONMENT` | `production` |
+
+> **Note:** If `SENTRY_DSN` is left empty or not set, Sentry is silently disabled. The app runs normally without it — this is intentional for local development.
+
+### Verify in Production
+After deploying with the DSN set, hit `GET /api/sentry-test`. You should see that error appear in your Sentry dashboard within seconds.
+
+> ⚠️ **Remove the `/api/sentry-test` route before going live to prevent accidental error spam.**

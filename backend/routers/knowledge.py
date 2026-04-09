@@ -1,3 +1,5 @@
+from fastapi import Depends
+from backend.services.auth import verify_api_key
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, func
@@ -7,7 +9,7 @@ from backend.db.database import get_db
 from backend.db.models import RasaResolution
 from backend.services.knowledge_base import confirm_resolution
 
-router = APIRouter(prefix="/knowledge", tags=["Knowledge Base"])
+router = APIRouter(prefix="/knowledge", tags=["Knowledge Base"], dependencies=[Depends(verify_api_key)])
 
 @router.get("/resolutions")
 def list_resolutions(

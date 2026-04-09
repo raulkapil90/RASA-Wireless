@@ -7,18 +7,15 @@ from chromadb.utils import embedding_functions
 from backend.config import CHROMA_DB_PATH, EMBEDDING_MODEL
 from backend.db.database import SessionLocal
 from backend.db.models import RasaResolution
+from backend.database import db as vector_db
 
 # Centralize the DB collection definition for resolutions
 COLLECTION_NAME_RES = "rasa_resolutions"
 
 def get_chroma_res_collection():
-    client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
-    embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name=EMBEDDING_MODEL
-    )
-    return client.get_or_create_collection(
+    return vector_db.client.get_or_create_collection(
         name=COLLECTION_NAME_RES,
-        embedding_function=embedding_fn,
+        embedding_function=vector_db.embedding_fn,
         metadata={"hnsw:space": "cosine"}
     )
 

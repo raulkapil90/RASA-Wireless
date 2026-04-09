@@ -24,6 +24,24 @@ from typing import Optional
 from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
 
+# ── Sentry Error Tracking (must init BEFORE FastAPI app is created) ──────
+from . import config as settings
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+
+if settings.SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=settings.SENTRY_DSN,
+        integrations=[
+            FastApiIntegration(transaction_style="endpoint"),
+            SqlalchemyIntegration(),
+        ],
+        traces_sample_rate=0.2,
+        profiles_sample_rate=0.1,
+        environment=settings.ENVIRONMENT,
+    )
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -119,6 +137,13 @@ app.include_router(integrations_router)
 app.include_router(knowledge_router)
 
 
+# ── Protected API Router ──────────────────────────────────────────────────
+from fastapi import APIRouter, Depends
+from .services.auth import verify_api_key
+
+api_router = APIRouter(dependencies=[Depends(verify_api_key)])
+
+
 # ── Request / Response Models ─────────────────────────────────────────────
 
 class QueryRequest(BaseModel):
@@ -179,7 +204,7 @@ async def api_health():
     )
 
 
-@app.post("/query", response_model=QueryResponse)
+@api_router.post("/query", response_model=QueryResponse)
 async def query(request: QueryRequest):
     """
     Primary endpoint for the Rasa integration.
@@ -204,7 +229,7 @@ async def query(request: QueryRequest):
     )
 
 
-@app.post("/ingest", response_model=IngestionResponse)
+@api_router.post("/ingest", response_model=IngestionResponse)
 async def ingest():
     """Manually triggers a full ingestion cycle."""
     try:
@@ -215,7 +240,7 @@ async def ingest():
     return IngestionResponse(**summary)
 
 
-@app.post("/analyze-logs")
+@api_router.post("/analyze-logs")
 async def analyze_wireless_logs(request: LogAnalysisRequest):
     """
     Multi-LLM Consensus Engine: Fan-out to Claude, GPT-4o & Gemini in parallel,
@@ -252,7 +277,7 @@ async def analyze_wireless_logs(request: LogAnalysisRequest):
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-@app.get("/sources")
+@api_router.get("/sources")
 async def list_sources():
     """Returns a summary of all indexed sources."""
     db = VectorDB()
@@ -279,7 +304,7 @@ async def list_sources():
 
 # ── Issues ────────────────────────────────────────────────────────────────
 
-@app.get("/ccc/issues")
+@api_router.get("/ccc/issues")
 async def get_ccc_issues(priority: Optional[str] = None, limit: int = 25):
     """
     Fetches active issues from Cisco Catalyst Center.
@@ -307,7 +332,7 @@ async def get_ccc_issues(priority: Optional[str] = None, limit: int = 25):
 
 # ── IPAM Forecast ─────────────────────────────────────────────────────────
 
-@app.get("/ccc/ipam/forecast")
+@api_router.get("/ccc/ipam/forecast")
 async def get_ipam_forecast():
     """
     Predicts IP pool exhaustion using linear regression.
@@ -330,7 +355,7 @@ async def get_ipam_forecast():
 
 # ── Reports ───────────────────────────────────────────────────────────────
 
-@app.post("/ccc/reports")
+@api_router.post("/ccc/reports")
 async def trigger_ccc_report(request: ReportRequest):
     """
     Triggers asynchronous CCC report generation.
@@ -345,7 +370,7 @@ async def trigger_ccc_report(request: ReportRequest):
 
 # ── HITL Remediation ──────────────────────────────────────────────────────
 
-@app.post("/ccc/remediate/propose")
+@api_router.post("/ccc/remediate/propose")
 async def propose_remediation(issue_id: str):
     """
     Proposes a remediation for a CCC issue.
@@ -369,7 +394,7 @@ async def propose_remediation(issue_id: str):
     return proposal.model_dump()
 
 
-@app.post("/ccc/remediate/approve/{proposal_id}")
+@api_router.post("/ccc/remediate/approve/{proposal_id}")
 async def approve_remediation(proposal_id: str):
     """
     Approves a remediation proposal.
@@ -384,7 +409,7 @@ async def approve_remediation(proposal_id: str):
     return {"status": "approved", "proposal_id": proposal_id}
 
 
-@app.post("/ccc/remediate/execute/{proposal_id}")
+@api_router.post("/ccc/remediate/execute/{proposal_id}")
 async def execute_remediation_endpoint(proposal_id: str):
     """
     Executes a previously approved remediation.
@@ -397,3 +422,15 @@ async def execute_remediation_endpoint(proposal_id: str):
     if not result.success:
         raise HTTPException(status_code=400, detail=result.message)
     return result.model_dump()
+
+
+# ── Sentry Test Route (temporary — remove before production) ──────────────
+# Remove this route before production
+@app.get("/api/sentry-test", tags=["debug"])
+async def sentry_test():
+    """Intentionally raises an exception to verify Sentry capture pipeline."""
+    raise Exception("Sentry test")
+
+
+# Attach the populated router
+app.include_router(api_router)

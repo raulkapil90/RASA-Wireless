@@ -1,3 +1,5 @@
+from fastapi import Depends
+from backend.services.auth import verify_api_key
 """Compliance FastAPI router — violations, health score, HITL approve/propose, audit trigger."""
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -9,7 +11,7 @@ from backend.db.models import ComplianceViolation
 from backend.db.schemas import ComplianceViolationRead
 from backend.compliance.audit_engine import audit_config, save_violations
 
-router = APIRouter(prefix="/compliance", tags=["compliance"])
+router = APIRouter(prefix="/compliance", tags=["compliance"], dependencies=[Depends(verify_api_key)])
 
 
 @router.get("/violations", response_model=List[ComplianceViolationRead])

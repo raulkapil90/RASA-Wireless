@@ -1,3 +1,5 @@
+from fastapi import Depends
+from backend.services.auth import verify_api_key
 """
 Jira Cloud Integration — FastAPI Router
 Connects to Jira REST API v3 using Basic Auth (email + API token).
@@ -13,7 +15,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 logger = logging.getLogger("jira")
-router = APIRouter(prefix="/jira", tags=["jira"])
+router = APIRouter(prefix="/jira", tags=["jira"], dependencies=[Depends(verify_api_key)])
 
 
 # ── Auth helpers ──────────────────────────────────────────────────────────────

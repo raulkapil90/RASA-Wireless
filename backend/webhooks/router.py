@@ -1,3 +1,5 @@
+from fastapi import Depends
+from backend.services.auth import verify_api_key
 """
 Webhook — FastAPI Router
 ==========================
@@ -20,7 +22,7 @@ from ..ccc.models import NarrativeInsight
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(tags=["Webhooks"])
+router = APIRouter(tags=["Webhooks"], dependencies=[Depends(verify_api_key)])
 
 # ── In-memory event store (ring buffer, last 100 events) ──────────────────
 

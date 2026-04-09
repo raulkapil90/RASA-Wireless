@@ -1,0 +1,21 @@
+--- TEST 1: HEALTH NO KEY ---
+Status: 200
+{
+  "status": "healthy",
+  "version": "2.0.0",
+  "documents_indexed": 0,
+  "ccc_mode": "demo"
+}
+
+--- TEST 2: SOURCES NO KEY ---
+Status: 403
+{
+  "detail": "Invalid or missing API key"
+}
+
+--- TEST 3: SOURCES WITH KEY ---
+Status: 200
+{
+  "sources": [],
+  "total": 0
+}

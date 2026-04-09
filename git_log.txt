@@ -1,0 +1,5 @@
+0711ab6  feat: Phase 2 - two-tier knowledge base Railway deployment config CORS health endpoint seed data
+c3b398e feat: Phase 11 - Enterprise Multi-Vendor Compliance Engine\n\n- Add ComplianceViolation DB model and Pydantic schemas\n- Add YAML compliance rules: 6 Cisco IOS-XE, 4 Palo Alto, 4 Arista EOS\n- Add rule_loader.py, audit_engine.py, syslog_receiver.py\n- Add FastAPI compliance router with 6 endpoints\n- Wire compliance router and syslog receiver into main.py\n- Add Governance Dashboard (Compliance.jsx) with Fleet Health Score,\n  violations table, HITL approve/propose modal, demo audit trigger\n- Update App.jsx with /compliance route\n- Update Layout.jsx sidebar with Compliance nav link\n- Add pyyaml to backend requirements
+59a4251 docs: add Phase 11 Compliance Engine design spec
+7042b90 feat: implement Phase 10 Multi-Vendor Configuration and Onboarding
+5770474 feat: Harden Log Analysis Engine v5.0 and add Backend implementation
