@@ -33,6 +33,14 @@ CCC_WEBHOOK_SECRET = os.getenv("CCC_WEBHOOK_SECRET", "")
 RASA_API_KEY = os.getenv("RASA_API_KEY", "dev-secret-key-123")
 API_KEY_ENABLED = os.getenv("API_KEY_ENABLED", "true").lower() == "true"
 
-# ── Observability ──────────────────────────────────────────────────
+# ── LLM Provider API Keys ──────────────────────────────────────────────────
+# All optional — system works with GROQ_API_KEY alone.
+# Missing keys are warned at startup; those providers are skipped gracefully.
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+
+# ── Observability ──────────────────────────────────────────────────────────
 SENTRY_DSN = os.getenv("SENTRY_DSN", "")  # Empty string = Sentry disabled
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")

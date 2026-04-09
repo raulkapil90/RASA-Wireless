@@ -15,7 +15,34 @@ import logging
 import asyncio
 from typing import Any, Dict, List, Optional
 
+from . import config
+
 logger = logging.getLogger(__name__)
+
+# ── Provider availability check (runs once at import time) ────────────────
+# Warns for missing optional keys; never raises. System works with Groq alone.
+
+def _check_providers() -> Dict[str, bool]:
+    available = {}
+    providers = {
+        "groq": config.GROQ_API_KEY,
+        "openai": config.OPENAI_API_KEY,
+        "anthropic": config.ANTHROPIC_API_KEY,
+        "gemini": config.GEMINI_API_KEY,
+    }
+    for name, key in providers.items():
+        if key:
+            available[name] = True
+        else:
+            logger.warning(
+                "LLM provider '%s' disabled — %s_API_KEY not set. "
+                "Skipping gracefully.",
+                name, name.upper()
+            )
+            available[name] = False
+    return available
+
+PROVIDERS = _check_providers()
 
 # ── Analyst Prompt #1: Client/Wireless Focus ──────────────────────────────────
 
@@ -86,8 +113,10 @@ Schema per object (ALL fields required):
 # ── Groq async call ───────────────────────────────────────────────────────────
 
 async def _groq_call(system: str, user: str, max_tokens: int = 2000) -> str:
+    if not PROVIDERS.get("groq"):
+        raise RuntimeError("GROQ_API_KEY not configured.")
     from groq import AsyncGroq
-    client = AsyncGroq(api_key=os.getenv("GROQ_API_KEY"))
+    client = AsyncGroq(api_key=config.GROQ_API_KEY)
     resp = await client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         temperature=0.1,
@@ -162,11 +191,14 @@ async def consensus_analyze(log_data: str) -> List[Dict[str, Any]]:
     if not log_data or not log_data.strip():
         return [_err("No Input", "Paste syslogs or radioactive trace.", severity="info", category="GENERAL")]
 
-    key = os.getenv("GROQ_API_KEY")
-    if not key:
-        return [_err("GROQ_API_KEY Missing", "Add GROQ_API_KEY to .env (free at console.groq.com).")]
+    if not PROVIDERS.get("groq"):
+        return [_err(
+            "GROQ_API_KEY Missing",
+            "Add GROQ_API_KEY to .env (free at console.groq.com)."
+        )]
 
-    logger.info("Consensus Engine: Dual-analyst fan-out via Groq...")
+    active = [name for name, ok in PROVIDERS.items() if ok]
+    logger.info("Consensus Engine: Dual-analyst fan-out. Active providers: %s", active)
 
     # FAN-OUT: both analysts run simultaneously (~1-2s each)
     results = await asyncio.gather(
@@ -205,6 +237,10 @@ def _err(title: str, detail: str, severity: str = "critical", category: str = "U
         "phase": "AI Inference",
         "diagnosis": detail,
         "evidence": detail,
-        "remediation": ["Add GROQ_API_KEY to .env (free at console.groq.com)", "Restart the backend."],
+        "remediation": [
+            "Ensure GROQ_API_KEY is set in your .env file (free at console.groq.com).",
+            "Optionally add OPENAI_API_KEY, ANTHROPIC_API_KEY, or GEMINI_API_KEY for additional providers.",
+            "Restart the backend after adding keys."
+        ],
         "consensus": {"agreement": "N/A", "note": "Error during analysis."}
     }
