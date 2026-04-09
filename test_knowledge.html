@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head><title>Two-Tier Knowledge DB Test</title></head>
+<body>
+    <h1>API Tests</h1>
+    <button id="btn1">Test 1: Known RADIUS Log</button>
+    <pre id="out1" style="background:#eee; padding:10px;"></pre>
+
+    <button id="btn2">Test 2: Novel Log</button>
+    <pre id="out2" style="background:#eee; padding:10px;"></pre>
+
+    <button id="btn3">Test 3: Knowledge Stats</button>
+    <pre id="out3" style="background:#eee; padding:10px;"></pre>
+
+    <button id="btn4">Test 4: Confirm Resolution</button>
+    <pre id="out4" style="background:#eee; padding:10px;"></pre>
+
+    <script>
+        const radiusLog = "*Mar 1 00:02:45.123: %RADIUS-4-RADIUS_DEAD: RADIUS server 192.168.1.10 is not responding";
+        const novelLog = "*Apr 5 12:00:00.000: %NOVEL-ERR-001: Experimental quantum AP 5ghz phased array decoupling unexpectedly";
+        
+        let storedId = null;
+
+        document.getElementById('btn1').onclick = async () => {
+            const res = await fetch('http://localhost:8000/analyze-logs', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({logs: radiusLog})
+            });
+            const data = await res.json();
+            document.getElementById('out1').innerText = JSON.stringify(data, null, 2);
+            if (data.findings && data.findings.length > 0) {
+                storedId = data.findings[0].id;
+            }
+        };
+
+        document.getElementById('btn2').onclick = async () => {
+            const res = await fetch('http://localhost:8000/analyze-logs', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({logs: novelLog})
+            });
+            const data = await res.json();
+            document.getElementById('out2').innerText = JSON.stringify(data, null, 2);
+        };
+
+        document.getElementById('btn3').onclick = async () => {
+            const res = await fetch('http://localhost:8000/knowledge/stats');
+            const data = await res.json();
+            document.getElementById('out3').innerText = JSON.stringify(data, null, 2);
+        };
+
+        document.getElementById('btn4').onclick = async () => {
+            if (!storedId) {
+                document.getElementById('out4').innerText = "Run Test 1 first to get a resolution ID!";
+                return;
+            }
+            const res = await fetch(`http://localhost:8000/knowledge/resolutions/${storedId}/confirm`, {
+                method: 'POST'
+            });
+            const data = await res.json();
+            document.getElementById('out4').innerText = JSON.stringify(data, null, 2);
+        };
+    </script>
+</body>
+</html>

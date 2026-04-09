@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, JSON, ForeignKey, DateTime
+from sqlalchemy import Column, String, JSON, ForeignKey, DateTime, Integer, Float, Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 import uuid
@@ -64,3 +64,33 @@ class ComplianceViolation(Base):
     remediation_cmd = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     resolved_at = Column(DateTime, nullable=True)
+
+
+class ExternalIntegration(Base):
+    __tablename__ = "external_integrations"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    name = Column(String, nullable=False)
+    url = Column(String, nullable=False)
+    auth_type = Column(String, default="none")   # none / token / oauth
+    icon = Column(String, default="Globe")
+    description = Column(String, nullable=True, default="")
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class RasaResolution(Base):
+    __tablename__ = "rasa_resolutions"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    log_fingerprint = Column(String, index=True, nullable=False)
+    device_type = Column(String, default="unknown")
+    issue_category = Column(String, nullable=False)
+    root_cause = Column(String, nullable=False)
+    resolution_steps = Column(JSON, nullable=False, default=list)
+    confidence_score = Column(Float, nullable=False)
+    times_validated = Column(Integer, default=0)
+    source = Column(String, default="llm_consensus")
+    client_env_tags = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_seen = Column(DateTime, default=datetime.utcnow)
+    is_deleted = Column(Boolean, default=False)

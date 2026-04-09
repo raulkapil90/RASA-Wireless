@@ -4,8 +4,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Database Configuration
-CHROMA_DB_PATH = os.path.join(BASE_DIR, "data", "chroma_db")
-COLLECTION_NAME = "cisco_docs"
+CHROMA_DB_PATH = "./chroma_store"
+COLLECTION_NAME = "rasa_knowledge"
 
 # Scraping Configuration
 CISCO_URLS = [

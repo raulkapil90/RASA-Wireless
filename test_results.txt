@@ -1,0 +1,224 @@
+--- TEST 1 - SOURCES ---
+STATUS: 200
+JSON_START
+{
+  "sources": [
+    {
+      "title": "Cisco Catalyst 9800 Series Wireless Controllers - Configuration Guides - Cisco",
+      "url": "https://www.cisco.com/c/en/us/support/wireless/catalyst-9800-series-wireless-controllers/products-installation-and-configuration-guides-list.html",
+      "type": "doc",
+      "last_updated": "2026-02-25T15:15:21.172229+00:00",
+      "chunks": 9
+    },
+    {
+      "title": "Cisco Catalyst 9800 Series Wireless Controllers - Release Notes - Cisco",
+      "url": "https://www.cisco.com/c/en/us/support/wireless/catalyst-9800-series-wireless-controllers/products-release-notes-list.html",
+      "type": "doc",
+      "last_updated": "2026-02-25T15:15:22.762120+00:00",
+      "chunks": 8
+    },
+    {
+      "title": "Cisco Catalyst 9800 Series Configuration Best Practices - Cisco",
+      "url": "https://www.cisco.com/c/en/us/products/collateral/wireless/catalyst-9800-series-wireless-controllers/guide-c07-743627.html",
+      "type": "doc",
+      "last_updated": "2026-02-25T15:15:26.634066+00:00",
+      "chunks": 153
+    }
+  ],
+  "total": 3
+}
+--- END TEST 1 - SOURCES ---
+
+--- TEST 2 - POST LOGS WITH log_text ---
+STATUS: 422
+JSON_START
+{
+  "detail": [
+    {
+      "type": "missing",
+      "loc": [
+        "body",
+        "logs"
+      ],
+      "msg": "Field required",
+      "input": {
+        "log_text": "*Mar 1 00:01:23.456: %DOT11-6-ASSOC: Station 00:11:22:33:44:55 Associated KEY_MGMT[WPAv2]\n*Mar 1 00:02:11.789: %DOT11-4-DISASSOC: Station 00:11:22:33:44:55 Disassociated REASON-CODE: 3\n*Mar 1 00:02:45.123: %RADIUS-4-RADIUS_DEAD: RADIUS server 192.168.1.10 is not responding"
+      }
+    }
+  ]
+}
+--- END TEST 2 - POST LOGS WITH log_text ---
+
+--- TEST 2B - POST LOGS WITH logs (Fixed Schema) ---
+STATUS: 200
+JSON_START
+{
+  "findings": [
+    {
+      "title": "Client Disassociation",
+      "severity": "medium",
+      "category": "CLIENT_ISSUE",
+      "confidence": 90,
+      "phase": "S_CO_ASSOCIATED",
+      "diagnosis": "The client with MAC address 00:11:22:33:44:55 disassociated from the AP due to a reason code 3, which typically indicates that the client has deauthenticated due to a timeout or a request from the AP.",
+      "evidence": "*Mar 1 00:02:11.789: %DOT11-4-DISASSOC: Station 00:11:22:33:44:55 Disassociated REASON-CODE: 3",
+      "remediation": [
+        "Step 1: Investigate why the client is disassociating from the network.",
+        "Step 2: Check the client's wireless settings and ensure it is configured correctly."
+      ],
+      "proTip": "Verify that the client's wireless settings are compatible with the WLC's configuration.",
+      "consensus": {
+        "agreement": "medium",
+        "note": "Both analysts agree that the client disassociated from the AP, but the root cause is unclear."
+      },
+      "advancedReason": {
+        "fault": "Client-side issue or wireless interference",
+        "impact": [
+          {
+            "label": "Layer 2",
+            "status": "warning",
+            "value": "Client disassociated from the network"
+          }
+        ]
+      }
+    },
+    {
+      "title": "RADIUS Server Issue",
+      "severity": "critical",
+      "category": "NETWORK_EVENT",
+      "confidence": 95,
+      "phase": "Authentication",
+      "diagnosis": "The RADIUS server at IP address 192.168.1.10 is not responding, which could be due to network connectivity issues, the RADIUS server being down, or configuration problems.",
+      "evidence": "*Mar 1 00:02:45.123: %RADIUS-4-RADIUS_DEAD: RADIUS server 192.168.1.10 is not responding",
+      "remediation": [
+        "Step 1: Verify that there are no network connectivity issues between the WLC and the RADIUS server.",
+        "Step 2: Check the RADIUS server configuration to ensure it is correctly set up and running."
+      ],
+      "proTip": "Ensure that the RADIUS server is reachable and responding correctly to authentication requests.",
+      "consensus": {
+        "agreement": "high",
+        "note": "Both analysts agree that the RADIUS server issue is a critical problem that needs to be addressed."
+      },
+      "advancedReason": {
+        "fault": "RADIUS server configuration or network connectivity issue",
+        "impact": [
+          {
+            "label": "Layer 3",
+            "status": "error",
+            "value": "RADIUS server not responding"
+          }
+        ]
+      }
+    }
+  ]
+}
+--- END TEST 2B - POST LOGS WITH logs (Fixed Schema) ---
+
+--- TEST 3 - ISSUES ---
+STATUS: 200
+JSON_START
+{
+  "issues": [
+    {
+      "issue": {
+        "issue_id": "DEMO-ISSUE-001",
+        "name": "PoE Controller Error on Switch-Floor3",
+        "description": "Power over Ethernet controller on Gi1/0/14 entered error-disabled state. Connected AP (AP-3F-CONF-01) lost power.",
+        "severity": "P1",
+        "priority": "CRITICAL",
+        "category": "Availability",
+        "entity_type": "Switch Port",
+        "entity_value": "Switch-Floor3 / Gi1/0/14",
+        "source": "CCC Event Correlation",
+        "status": "active",
+        "suggested_actions": [
+          "Check PoE budget on Switch-Floor3",
+          "Verify AP power requirements (802.3at vs 802.3bt)",
+          "Run 'show power inline Gi1/0/14 detail' on the switch"
+        ],
+        "timestamp": 1775553198402
+      },
+      "narrative": {
+        "event_id": "DEMO-ISSUE-001",
+        "severity": "CRITICAL",
+        "plain_english_summary": "\ud83d\udd34 **Power Failure Alert**: Switch-Floor3 / Gi1/0/14 has entered an error-disabled state due to a PoE controller error. The connected device (likely an AP or IP phone) has lost power. This typically occurs when the switch port's PoE budget is exceeded or when the powered device draws more than the port's class allows.",
+        "affected_devices": [
+          "Switch-Floor3",
+          "Gi1",
+          "0",
+          "14"
+        ],
+        "suggested_action": "Run 'show power inline 14 detail' on the switch. Check if the AP requires 802.3bt (PoE++) vs the switch provides 802.3af/at. Consider 'shutdown / no shutdown' on the port to recover, or redistribute PoE budget.",
+        "raw_category": "Availability",
+        "timestamp": "2026-04-07T09:13:18.402000+00:00"
+      }
+    },
+    {
+      "issue": {
+        "issue_id": "DEMO-ISSUE-002",
+        "name": "MAC Flapping Detected on VLAN 100",
+        "description": "MAC address aa:bb:cc:dd:ee:ff is flapping between Gi1/0/5 and Gi1/0/12 on Core-Switch-1. This indicates a Layer 2 loop or a misconfigured etherchannel.",
+        "severity": "P2",
+        "priority": "HIGH",
+        "category": "Connected",
+        "entity_type": "VLAN",
+        "entity_value": "VLAN 100 / Core-Switch-1",
+        "source": "CCC Event Correlation",
+        "status": "active",
+        "suggested_actions": [
+          "Check Spanning Tree topology on VLAN 100",
+          "Verify EtherChannel configuration on both uplinks",
+          "Run 'show mac address-table notifications' for flap history"
+        ],
+        "timestamp": 1775549598402
+      },
+      "narrative": {
+        "event_id": "DEMO-ISSUE-002",
+        "severity": "HIGH",
+        "plain_english_summary": "\ud83d\udfe0 **Layer 2 Loop Detected**: MAC address flapping observed on VLAN 100 / Core-Switch-1. A MAC address is oscillating between two or more switch ports, which strongly indicates a spanning-tree misconfiguration, a rogue hub, or a broken etherchannel. This will cause intermittent connectivity for any device behind the affected ports.",
+        "affected_devices": [
+          "VLAN 100",
+          "Core-Switch-1"
+        ],
+        "suggested_action": "Check Spanning Tree topology: 'show spanning-tree vlan 100'. Verify EtherChannel bundles: 'show etherchannel summary'. Enable BPDU Guard on access ports to auto-isolate rogue bridges.",
+        "raw_category": "Connected",
+        "timestamp": "2026-04-07T08:13:18.402000+00:00"
+      }
+    },
+    {
+      "issue": {
+        "issue_id": "DEMO-ISSUE-003",
+        "name": "High Channel Utilization on AP-2F-OPEN-03 (5GHz)",
+        "description": "5GHz radio on AP-2F-OPEN-03 is reporting 87% channel utilization on channel 36. This exceeds the 70% threshold and indicates RF contention.",
+        "severity": "P3",
+        "priority": "MEDIUM",
+        "category": "Performance",
+        "entity_type": "Access Point",
+        "entity_value": "AP-2F-OPEN-03 / Radio 1 (5GHz)",
+        "source": "CCC Assurance",
+        "status": "active",
+        "suggested_actions": [
+          "Enable RRM DCA on the 5GHz band",
+          "Check for co-channel interference from neighboring APs",
+          "Consider enabling FRA (Flexible Radio Assignment)"
+        ],
+        "timestamp": 1775545998402
+      },
+      "narrative": {
+        "event_id": "DEMO-ISSUE-003",
+        "severity": "MEDIUM",
+        "plain_english_summary": "\ud83d\udfe1 **RF Contention Warning**: AP-2F-OPEN-03 / Radio 1 (5GHz) is experiencing elevated channel utilization (87%). When channel utilization exceeds 70%, clients experience increased latency and retransmissions. This is NOT a bandwidth problem \u2014 it's an airtime contention problem. More bandwidth won't fix it; fewer devices per channel will.",
+        "affected_devices": [
+          "AP-2F-OPEN-03",
+          "Radio 1 (5GHz)"
+        ],
+        "suggested_action": "Enable Dynamic Channel Assignment (DCA) if not active. Consider Flexible Radio Assignment (FRA) to move radios to less-congested bands. Audit for co-channel interference: 'show ap auto-rf dot11 5ghz'. Reduce client density per AP if in a high-density venue.",
+        "raw_category": "Performance",
+        "timestamp": "2026-04-07T07:13:18.402000+00:00"
+      }
+    }
+  ],
+  "total": 3
+}
+--- END TEST 3 - ISSUES ---
+

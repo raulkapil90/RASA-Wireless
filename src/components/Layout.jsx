@@ -20,7 +20,10 @@ import {
     Search as SearchIcon,
     Shield,
     ShieldCheck,
-    Database
+    Database,
+    Ticket,
+    Cloud,
+    Monitor
 } from 'lucide-react';
 
 const sidebarLinks = [
@@ -34,6 +37,17 @@ const sidebarLinks = [
             { path: '/catalyst-bridge', icon: Shield, label: 'Catalyst Bridge' },
             { path: '/ipam-forecast', icon: Database, label: 'IPAM Forecast' },
             { path: '/issues', icon: AlertCircle, label: 'Incidents' },
+        ]
+    },
+    {
+        section: 'INTEGRATIONS', links: [
+            { path: '/jira', icon: Ticket, label: 'Jira Tickets' },
+            { path: '/salesforce', icon: Cloud, label: 'Salesforce' },
+            { path: '/external-dashboards', icon: Monitor, label: 'External Dashboards' },
+        ]
+    },
+    {
+        section: 'RESOURCES', links: [
             { path: '/kb', icon: BookOpen, label: 'Knowledge Base' },
             { path: '/reports', icon: BarChart3, label: 'Reports' },
         ]

@@ -13,6 +13,9 @@ import CatalystBridge from './pages/CatalystBridge';
 import IpamForecast from './pages/IpamForecast';
 import Configuration from './pages/Configuration';
 import Compliance from './pages/Compliance';
+import Jira from './pages/Jira';
+import Salesforce from './pages/Salesforce';
+import ExternalDashboards from './pages/ExternalDashboards';
 
 // Placeholder components for KB and Reports
 const Placeholder = ({ title }) => (
@@ -44,6 +47,9 @@ function App() {
             <Route path="ipam-forecast" element={<IpamForecast />} />
             <Route path="configuration" element={<Configuration />} />
             <Route path="compliance" element={<Compliance />} />
+            <Route path="jira" element={<Jira />} />
+            <Route path="salesforce" element={<Salesforce />} />
+            <Route path="external-dashboards" element={<ExternalDashboards />} />
             <Route path="kb" element={<Placeholder title="Knowledge Base" />} />
             <Route path="reports" element={<Placeholder title="Reports" />} />
             <Route path="settings" element={<Placeholder title="Settings" />} />

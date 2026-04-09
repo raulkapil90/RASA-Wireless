@@ -1,0 +1,171 @@
+--- TEST 1: KNOWN RADIUS LOG ---
+STATUS: 200
+{
+  "source": "internal_db",
+  "findings": [
+    {
+      "id": "f67764f9-9c96-48cc-a259-c59a840d4b6f",
+      "title": "AUTH_FAILURE",
+      "severity": "high",
+      "category": "AUTH_FAILURE",
+      "confidence": 95,
+      "phase": "Historical DB",
+      "diagnosis": "RADIUS server explicitly tracking as DEAD due to consecutive timeouts or ICMP unreachability.",
+      "evidence": "Log matched exactly to historical fingerprint.",
+      "remediation": [
+        "Verify reachability between WLC management interface and RADIUS Server",
+        "Ensure shared secret matches exactly on WLC and RADIUS",
+        "Check perimeter firewall for dropped UDP port 1812/1813 traffic"
+      ],
+      "proTip": "Matched previously resolved template (validated 12x).",
+      "consensus": {
+        "agreement": "high",
+        "note": "Tier-1 Auto-Match"
+      },
+      "advancedReason": {
+        "fault": "RADIUS server explicitly tracking as DEAD due to consecutive timeouts or ICMP unreachability.",
+        "impact": [
+          {
+            "label": "DB Match",
+            "status": "ok",
+            "value": "Validated"
+          }
+        ]
+      }
+    }
+  ],
+  "tier": 1
+}
+
+--- TEST 2: NOVEL LOG ---
+STATUS: 200
+{
+  "source": "llm_consensus",
+  "findings": [
+    {
+      "title": "Unknown Error on Experimental Quantum AP",
+      "severity": "warning",
+      "category": "UNKNOWN_ERR",
+      "confidence": 80,
+      "phase": "Unknown",
+      "diagnosis": "The log line indicates an unexpected decoupling of the experimental quantum AP's 5ghz phased array, but the cause and impact are unclear.",
+      "evidence": "*Apr 5 12:00:00.000: %NOVEL-ERR-001: Experimental quantum AP 5ghz phased array decoupling unexpectedly",
+      "remediation": [
+        "Investigate the experimental quantum AP feature and its configuration.",
+        "Check for any related log messages or error reports."
+      ],
+      "proTip": "Experimental features can be unstable and may require special configuration or support.",
+      "consensus": {
+        "agreement": "low",
+        "note": "Both analysts agree that the log line is unusual and does not match standard Cisco log messages."
+      },
+      "advancedReason": {
+        "fault": "Unknown mechanism of failure, possibly related to experimental feature.",
+        "impact": [
+          {
+            "label": "AP Functionality",
+            "status": "warning",
+            "value": "Potential instability or errors."
+          }
+        ]
+      }
+    },
+    {
+      "title": "No Client-Side Issues Detected",
+      "severity": "info",
+      "category": "CLIENT_ISSUE",
+      "confidence": 100,
+      "phase": "None",
+      "diagnosis": "The log line does not contain any information related to client-side issues.",
+      "evidence": "None",
+      "remediation": [
+        "None"
+      ],
+      "proTip": "Client-side issues typically require log messages with specific keywords or phrases.",
+      "consensus": {
+        "agreement": "high",
+        "note": "Both analysts agree that the log line does not contain relevant client-side information."
+      },
+      "advancedReason": {
+        "fault": "No client-side issue detected.",
+        "impact": [
+          {
+            "label": "Client Connectivity",
+            "status": "ok",
+            "value": "No issues detected."
+          }
+        ]
+      }
+    },
+    {
+      "title": "No Infrastructure Issues Detected",
+      "severity": "info",
+      "category": "NETWORK_EVENT",
+      "confidence": 100,
+      "phase": "None",
+      "diagnosis": "The log line does not contain any information related to infrastructure issues.",
+      "evidence": "None",
+      "remediation": [
+        "None"
+      ],
+      "proTip": "Infrastructure issues typically require log messages with specific keywords or phrases.",
+      "consensus": {
+        "agreement": "high",
+        "note": "Both analysts agree that the log line does not contain relevant infrastructure information."
+      },
+      "advancedReason": {
+        "fault": "No infrastructure issue detected.",
+        "impact": [
+          {
+            "label": "Network Stability",
+            "status": "ok",
+            "value": "No issues detected."
+          }
+        ]
+      }
+    }
+  ],
+  "tier": 2
+}
+
+--- TEST 3: STATS ---
+STATUS: 200
+{
+  "total_resolutions": 6,
+  "total_validations": 73,
+  "top_issue_categories": [
+    {
+      "category": "NETWORK_EVENT",
+      "count": 2
+    },
+    {
+      "category": "UNKNOWN_ERR",
+      "count": 1
+    },
+    {
+      "category": "RF_EVENT",
+      "count": 1
+    },
+    {
+      "category": "CLIENT_ISSUE",
+      "count": 1
+    },
+    {
+      "category": "AUTH_FAILURE",
+      "count": 1
+    }
+  ],
+  "most_validated_resolution": {
+    "id": "bd4d685d-9ffa-414c-8315-fe558a29d6ce",
+    "issue_category": "NETWORK_EVENT",
+    "times_validated": 20
+  },
+  "cache_hit_rate": "N/A"
+}
+
+--- TEST 4: CONFIRM RESOLUTION ---
+STATUS: 200
+{
+  "message": "Resolution confirmed successfully",
+  "times_validated": 13
+}

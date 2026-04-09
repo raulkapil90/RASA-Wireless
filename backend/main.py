@@ -50,6 +50,10 @@ from .llm_analyzer import analyze_syslogs
 
 from .routers.config import router as config_router
 from .routers.compliance import router as compliance_router
+from .routers.jira import router as jira_router
+from .routers.salesforce import router as salesforce_router
+from .routers.integrations import router as integrations_router
+from .routers.knowledge import router as knowledge_router
 from .db.database import engine, Base
 
 logging.basicConfig(
@@ -94,7 +98,12 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Tighten in production
+    allow_origins=[
+        "https://netops-ai-rasa-rahuls-projects-c2478977.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -104,6 +113,10 @@ app.add_middleware(
 app.include_router(webhook_router, prefix="/webhooks")
 app.include_router(config_router)
 app.include_router(compliance_router)
+app.include_router(jira_router)
+app.include_router(salesforce_router)
+app.include_router(integrations_router)
+app.include_router(knowledge_router)
 
 
 # ── Request / Response Models ─────────────────────────────────────────────
@@ -152,8 +165,8 @@ class HealthResponse(BaseModel):
 
 # ── Existing Endpoints ────────────────────────────────────────────────────
 
-@app.get("/health", response_model=HealthResponse)
-async def health():
+@app.get("/api/health", response_model=HealthResponse)
+async def api_health():
     """Health-check endpoint."""
     db = VectorDB()
     count = db.collection.count()
@@ -207,11 +220,33 @@ async def analyze_wireless_logs(request: LogAnalysisRequest):
     """
     Multi-LLM Consensus Engine: Fan-out to Claude, GPT-4o & Gemini in parallel,
     then Fan-in via a Claude Synthesizer to produce authoritative JSON findings.
+    Now with two-tier lookup.
     """
+    from .services.knowledge_base import lookup_internal, store_resolution
     from .llm_analyzer import consensus_analyze
     try:
+        # Tier 1: Check internal DB and Semantic Memory
+        match = lookup_internal(request.logs)
+        if match:
+            return {"source": "internal_db", "findings": [match], "tier": 1}
+
+        # Tier 2: Process via LLM Consensus
         findings = await consensus_analyze(request.logs)
-        return {"findings": findings}
+        
+        # Store high-confidence findings into DB
+        for finding in findings:
+            if finding.get("confidence", 0) >= 80:
+                store_resolution(
+                    log_text=request.logs,
+                    device_type="unknown",
+                    issue_category=finding.get("category", "GENERAL"),
+                    root_cause=finding.get("diagnosis", ""),
+                    resolution_steps=finding.get("remediation", []),
+                    confidence_score=finding.get("confidence", 0) / 100.0,
+                    source="llm_consensus"
+                )
+                
+        return {"source": "llm_consensus", "findings": findings, "tier": 2}
     except Exception as exc:
         logger.exception("Consensus Log Analysis failed.")
         raise HTTPException(status_code=500, detail=str(exc))

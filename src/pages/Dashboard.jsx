@@ -10,7 +10,10 @@ import {
     Zap,
     Sparkles,
     Shield,
-    Database
+    Database,
+    Ticket,
+    Cloud,
+    Monitor
 } from 'lucide-react';
 
 const ServiceCard = ({ title, description, icon: Icon, colorClass, path }) => (
@@ -81,6 +84,34 @@ export default function Dashboard() {
                     colorClass="bg-cyan-600 shadow-cyan-600/20"
                     path="/ipam-forecast"
                 />
+            </div>
+
+            {/* Integrations Section */}
+            <div>
+                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6">3rd Party Integrations</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <ServiceCard
+                        title="Jira Tickets"
+                        description="Network Operations ticket queue from Jira Cloud. Create and track incidents directly from this platform."
+                        icon={Ticket}
+                        colorClass="bg-blue-600 shadow-blue-600/20"
+                        path="/jira"
+                    />
+                    <ServiceCard
+                        title="Salesforce Cases"
+                        description="Live Network Cases from your Salesforce org. Filter by Category=Network and open records natively."
+                        icon={Cloud}
+                        colorClass="bg-sky-500 shadow-sky-500/20"
+                        path="/salesforce"
+                    />
+                    <ServiceCard
+                        title="External Dashboards"
+                        description="iFrame-embed any external monitoring tool — Grafana, Kibana, Datadog, PagerDuty, Zabbix."
+                        icon={Monitor}
+                        colorClass="bg-slate-600 shadow-slate-600/20"
+                        path="/external-dashboards"
+                    />
+                </div>
             </div>
 
             {/* System Status Bar */}
